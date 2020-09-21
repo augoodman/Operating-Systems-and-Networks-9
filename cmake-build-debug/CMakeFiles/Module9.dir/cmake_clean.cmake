@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Module9.dir/main.c.o"
+  "CMakeFiles/Module9.dir/GoodmanSJFL.c.o"
   "Module9"
   "Module9.pdb"
 )

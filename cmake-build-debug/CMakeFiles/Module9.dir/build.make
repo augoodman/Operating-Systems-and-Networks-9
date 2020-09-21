@@ -77,27 +77,27 @@ include CMakeFiles/Module9.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Module9.dir/flags.make
 
-CMakeFiles/Module9.dir/main.c.o: CMakeFiles/Module9.dir/flags.make
-CMakeFiles/Module9.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andrew/CLionProjects/Module9/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Module9.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Module9.dir/main.c.o   -c /home/andrew/CLionProjects/Module9/main.c
+CMakeFiles/Module9.dir/GoodmanSJFL.c.o: CMakeFiles/Module9.dir/flags.make
+CMakeFiles/Module9.dir/GoodmanSJFL.c.o: ../GoodmanSJFL.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/andrew/CLionProjects/Module9/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Module9.dir/GoodmanSJFL.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Module9.dir/GoodmanSJFL.c.o   -c /home/andrew/CLionProjects/Module9/GoodmanSJFL.c
 
-CMakeFiles/Module9.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Module9.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/andrew/CLionProjects/Module9/main.c > CMakeFiles/Module9.dir/main.c.i
+CMakeFiles/Module9.dir/GoodmanSJFL.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Module9.dir/GoodmanSJFL.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/andrew/CLionProjects/Module9/GoodmanSJFL.c > CMakeFiles/Module9.dir/GoodmanSJFL.c.i
 
-CMakeFiles/Module9.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Module9.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/andrew/CLionProjects/Module9/main.c -o CMakeFiles/Module9.dir/main.c.s
+CMakeFiles/Module9.dir/GoodmanSJFL.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Module9.dir/GoodmanSJFL.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/andrew/CLionProjects/Module9/GoodmanSJFL.c -o CMakeFiles/Module9.dir/GoodmanSJFL.c.s
 
 # Object files for target Module9
 Module9_OBJECTS = \
-"CMakeFiles/Module9.dir/main.c.o"
+"CMakeFiles/Module9.dir/GoodmanSJFL.c.o"
 
 # External object files for target Module9
 Module9_EXTERNAL_OBJECTS =
 
-Module9: CMakeFiles/Module9.dir/main.c.o
+Module9: CMakeFiles/Module9.dir/GoodmanSJFL.c.o
 Module9: CMakeFiles/Module9.dir/build.make
 Module9: CMakeFiles/Module9.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/andrew/CLionProjects/Module9/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable Module9"

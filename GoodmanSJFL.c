@@ -2,7 +2,7 @@
 * File:   GoodmanSJFL.c
 * Simulate shortest-job first processor scheduling algorithms.
 *
-* Completion time:  ___ hours
+* Completion runningTime:  ___ hours
 * 
 * @author Goodman
 * @version 2020.09.17
@@ -10,6 +10,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // INCLUDES
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,8 +28,8 @@ typedef struct Process {
 
 ////////////////////////////////////////////////////////////////////////////////
 //GLOBAL VARIABLES
+int numProcesses, numTicks, turnAroundTime = 0, waitingTime = 0, error = 0, runningTime = 0;
 Process* processes = NULL;
-int numProcesses, numTicks, turnAroundTime, waitingTime, error, time = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 //FORWARD DECLARATIONS
@@ -37,12 +38,14 @@ void readFile(char* filename);
 Process* readProcesses(FILE* file);
 int addTime(int t);
 int estimateTime(int t);
-int calcTurnaround();
 int calcWaiting();
 int calcError();
 void terminate();
-void printSJF(Process* p);
-void printSJFL(Process* p); //and maybe some other data
+void* printSJF();
+void* printSJFL(); //and maybe some other data
+void SJFSort(int* p, int* t, int n);
+void SJFLSort(int* p, int* t, int* tau, int n);
+void swap(int* x, int* y);
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -93,42 +96,103 @@ void terminate(){
 * Prints SJF data to console
 * @param course is the course struct to be printed
 */
-void printSJF(Process* p){
+void* printSJF(){
     int i, j;
+    int p[numProcesses], t[numProcesses];
     printf("==Shortest-Job-First==\n");
-    for(i = 0; i < numTicks; i++){
-        printf("Simulating %dth tick of processes @ time %d:\n", i, time);
-        for(j = 0; j < numProcesses; j++)
-            printf("\tProcess %d took %d.\n", j, p[j].t[i]);
+    for(i = 0; i < numTicks; i++) {
+        printf("Simulating %dth tick of processes @ runningTime %d:\n", i, runningTime);
+        for (j = 0; j < numProcesses; j++) {
+            p[j] = processes[j].processID;
+            t[j] = processes[j].t[i];
+        }
+        SJFSort(p, t, numProcesses);
+        for (j = 0; j < numProcesses; j++){
+            runningTime += processes[j].t[i];
+            printf("\tProcess %d took %d.\n", p[j], t[j]);
+        }
+        waitingTime += t[0];
+        turnAroundTime = runningTime + waitingTime;
     }
     printf("Turnaround time: %d\n", turnAroundTime);
     printf("Waiting time: %d\n", waitingTime);
+    runningTime = 0;
+    turnAroundTime = 0;
+    waitingTime = 0;
 }
-
 
 /**
 * Prints SJFL data to console
 * @param course is the course struct to be printed
 */
-void printSJFL(Process* p){
-    int i, j;
-    printf("==Shortest-Job-First Live==\n");
-    for(i = 0; i < numTicks; i++){
-        printf("Simulating %dth tick of processes @ time %d:\n", i, time);
-        for(j = 0; j < numProcesses; j++)
-            printf("\tProcess %d was estimated for %d and took %d.\n", j, p[j].e[i], p[j].t[i]);
+void* printSJFL(){
+    int i, j, tau[numProcesses];
+    float diff;
+    int p[numProcesses], t[numProcesses];
+    printf("==Shortest-Job-First==\n");
+    for(i = 0; i < numTicks; i++) {
+        printf("Simulating %dth tick of processes @ runningTime %d:\n", i, runningTime);
+        for (j = 0; j < numProcesses; j++) {
+            p[j] = processes[j].processID;
+            t[j] = processes[j].t[i];
+            tau[j] = processes[j].tau;
+        }
+        SJFLSort(p, t, tau, numProcesses);
+        for (j = 0; j < numProcesses; j++){
+            runningTime += processes[j].t[i];
+            printf("\tProcess %d was estimated for %d and took %d.\n", p[j], processes[p[j]].tau, t[j]);
+            diff = (float)processes[p[j]].tau - (float)t[j];
+            error += abs((int)diff);
+            diff = diff * processes[p[j]].alpha;
+            if(diff < 0)
+                processes[p[j]].tau = processes[p[j]].tau - (int)diff;
+            else
+                processes[p[j]].tau = processes[p[j]].tau - abs((int)round((double)diff));
+        }
+        waitingTime += t[0];
+        turnAroundTime = runningTime + waitingTime;
+        //if(diff < 0)
+        //    error -= (int)diff;
+        //else
     }
     printf("Turnaround time: %d\n", turnAroundTime);
     printf("Waiting time: %d\n", waitingTime);
+    printf("Estimation Error: %d\n", error);
+    runningTime = 0;
+    turnAroundTime = 0;
+    waitingTime = 0;
+    error = 0;
 }
 
-/**
-* Prints basic usage instructions for the program to the command line
-*/
-void print_usage(){
-    printf("USAGE:\n./LastNameCourseReader -d <data_file_name(char*)> -c <instruction_file_name(char*)>\n");
-    printf("-d refers to the required input data file containing student & course information; this must be a valid .txt file\n");
-    printf("-i refers to the optionally supported 'instruction file' that provides directions for how the program should execute without CLI input; \n\t must be a valid .txt.file\n");
+void swap(int* x, int* y){
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void SJFSort(int *p, int *t, int n){
+    int i, j, min;
+    for (i = 0; i < n - 1; i++) {
+        min = i;
+        for (j = i + 1; j < n; j++)
+            if (t[j] < t[min])
+                min = j;
+        swap(&t[min], &t[i]);
+        swap(&p[min], &p[i]);
+    }
+}
+
+void SJFLSort(int* p, int* t, int* tau, int n){
+    int i, j, min;
+    for (i = 0; i < n - 1; i++) {
+        min = i;
+        for (j = i + 1; j < n; j++)
+            if (tau[j] < tau[min])
+                min = j;
+        swap(&tau[min], &tau[i]);
+        swap(&t[min], &t[i]);
+        swap(&p[min], &p[i]);
+    }
 }
 
 /**
@@ -136,22 +200,8 @@ void print_usage(){
 */
 int main(int argc, char* argv[]){
     char* datafile;
-    int opt;
-    while((opt = getopt(argc, argv, ":d:")) != -1)
-        switch(opt){
-            case 'd':
-                datafile = optarg;
-                break;
-            case ':':
-                printf("option needs a value\n");
-                break;
-            case '?':
-                printf("unknown option: %c\n", optopt);
-                break;
-        }
-    for (; optind < argc; optind++)
-        printf("Given extra arguments: %s\n", argv[optind]);
-    int dflen;
+    int i, dflen;
+    datafile = argv[1];
     if(datafile != NULL){
         dflen = strlen(datafile);
         if(dflen >= 5
@@ -167,8 +217,9 @@ int main(int argc, char* argv[]){
         printf("No data file name provided. This is a required field.\n");
         exit(1);
     }
-    printSJF(processes);
+    printSJF();
     printf("\n");
-    //printSJFL(processes);
+    printSJFL();
+    terminate();
     return 0;
 }

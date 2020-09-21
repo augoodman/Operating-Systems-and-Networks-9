@@ -143,32 +143,32 @@ Module9/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/build
 .PHONY : Module9/fast
 
-main.o: main.c.o
+GoodmanSJFL.o: GoodmanSJFL.c.o
 
-.PHONY : main.o
+.PHONY : GoodmanSJFL.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/main.c.o
-.PHONY : main.c.o
+GoodmanSJFL.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/GoodmanSJFL.c.o
+.PHONY : GoodmanSJFL.c.o
 
-main.i: main.c.i
+GoodmanSJFL.i: GoodmanSJFL.c.i
 
-.PHONY : main.i
+.PHONY : GoodmanSJFL.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/main.c.i
-.PHONY : main.c.i
+GoodmanSJFL.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/GoodmanSJFL.c.i
+.PHONY : GoodmanSJFL.c.i
 
-main.s: main.c.s
+GoodmanSJFL.s: GoodmanSJFL.c.s
 
-.PHONY : main.s
+.PHONY : GoodmanSJFL.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/main.c.s
-.PHONY : main.c.s
+GoodmanSJFL.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Module9.dir/build.make CMakeFiles/Module9.dir/GoodmanSJFL.c.s
+.PHONY : GoodmanSJFL.c.s
 
 # Help Target
 help:
@@ -179,9 +179,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Module9"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... GoodmanSJFL.o"
+	@echo "... GoodmanSJFL.i"
+	@echo "... GoodmanSJFL.s"
 .PHONY : help
 
 

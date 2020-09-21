@@ -76,7 +76,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/andrew/CLionProjects/Module9/main.c">
+		<Unit filename="/home/andrew/CLionProjects/Module9/GoodmanSJFL.c">
 			<Option target="Module9"/>
 		</Unit>
 		<Unit filename="/home/andrew/CLionProjects/Module9/CMakeLists.txt">
