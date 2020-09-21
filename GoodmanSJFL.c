@@ -2,7 +2,7 @@
 * File:   GoodmanSJFL.c
 * Simulate shortest-job first processor scheduling algorithms.
 *
-* Completion runningTime:  ___ hours
+* Completion runningTime:  6 hours
 * 
 * @author Goodman
 * @version 2020.09.17
@@ -23,7 +23,6 @@ typedef struct Process {
     int tau;
     float alpha;
     int* t;
-    int* e;
 } Process;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -33,19 +32,14 @@ Process* processes = NULL;
 
 ////////////////////////////////////////////////////////////////////////////////
 //FORWARD DECLARATIONS
-
 void readFile(char* filename);
 Process* readProcesses(FILE* file);
-int addTime(int t);
-int estimateTime(int t);
-int calcWaiting();
-int calcError();
-void terminate();
-void* printSJF();
-void* printSJFL(); //and maybe some other data
+void printSJF();
+void printSJFL();
 void SJFSort(int* p, int* t, int n);
 void SJFLSort(int* p, int* t, int* tau, int n);
 void swap(int* x, int* y);
+void terminate();
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -79,29 +73,14 @@ Process* readProcesses(FILE* file){
 }
 
 /**
-* Calls destructor functions to free memory and exits program
-*/
-void terminate(){
-    int i;
-    for(i = 0; i < numProcesses; i++) {
-        free(processes[i].t);
-        free(processes[i].e);
-    }
-    free(processes);
-    processes = NULL;
-    exit(1);
-}
-
-/**
 * Prints SJF data to console
-* @param course is the course struct to be printed
 */
-void* printSJF(){
+void printSJF(){
     int i, j;
     int p[numProcesses], t[numProcesses];
     printf("==Shortest-Job-First==\n");
     for(i = 0; i < numTicks; i++) {
-        printf("Simulating %dth tick of processes @ runningTime %d:\n", i, runningTime);
+        printf("Simulating %dth tick of processes @ time %d:\n", i, runningTime);
         for (j = 0; j < numProcesses; j++) {
             p[j] = processes[j].processID;
             t[j] = processes[j].t[i];
@@ -109,7 +88,7 @@ void* printSJF(){
         SJFSort(p, t, numProcesses);
         for (j = 0; j < numProcesses; j++){
             runningTime += processes[j].t[i];
-            printf("\tProcess %d took %d.\n", p[j], t[j]);
+            printf("  Process %d took %d.\n", p[j], t[j]);
         }
         waitingTime += t[0];
         turnAroundTime = runningTime + waitingTime;
@@ -123,15 +102,14 @@ void* printSJF(){
 
 /**
 * Prints SJFL data to console
-* @param course is the course struct to be printed
 */
-void* printSJFL(){
+void printSJFL(){
     int i, j, tau[numProcesses];
     float diff;
     int p[numProcesses], t[numProcesses];
-    printf("==Shortest-Job-First==\n");
+    printf("==Shortest-Job-First Live==\n");
     for(i = 0; i < numTicks; i++) {
-        printf("Simulating %dth tick of processes @ runningTime %d:\n", i, runningTime);
+        printf("Simulating %dth tick of processes @ time %d:\n", i, runningTime);
         for (j = 0; j < numProcesses; j++) {
             p[j] = processes[j].processID;
             t[j] = processes[j].t[i];
@@ -140,7 +118,7 @@ void* printSJFL(){
         SJFLSort(p, t, tau, numProcesses);
         for (j = 0; j < numProcesses; j++){
             runningTime += processes[j].t[i];
-            printf("\tProcess %d was estimated for %d and took %d.\n", p[j], processes[p[j]].tau, t[j]);
+            printf("  Process %d was estimated for %d and took %d.\n", p[j], processes[p[j]].tau, t[j]);
             diff = (float)processes[p[j]].tau - (float)t[j];
             error += abs((int)diff);
             diff = diff * processes[p[j]].alpha;
@@ -151,9 +129,6 @@ void* printSJFL(){
         }
         waitingTime += t[0];
         turnAroundTime = runningTime + waitingTime;
-        //if(diff < 0)
-        //    error -= (int)diff;
-        //else
     }
     printf("Turnaround time: %d\n", turnAroundTime);
     printf("Waiting time: %d\n", waitingTime);
@@ -164,12 +139,12 @@ void* printSJFL(){
     error = 0;
 }
 
-void swap(int* x, int* y){
-    int temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
+/**
+* Sorts processes and their respective attributes in SJF algorithm
+* @param p is a pointer to an array of process IDs
+* @param t is a pointer to an array of process t values
+* @param n is the size of the p and t arrays
+*/
 void SJFSort(int *p, int *t, int n){
     int i, j, min;
     for (i = 0; i < n - 1; i++) {
@@ -182,6 +157,13 @@ void SJFSort(int *p, int *t, int n){
     }
 }
 
+/**
+* Sorts processes and their respective attributes in SJF algorithm
+* @param p is a pointer to an array of process IDs
+* @param t is a pointer to an array of process t values
+* @param tau is a pointer to an array of process tau values
+* @param n is the size of the p, t and tau arrays
+*/
 void SJFLSort(int* p, int* t, int* tau, int n){
     int i, j, min;
     for (i = 0; i < n - 1; i++) {
@@ -193,6 +175,29 @@ void SJFLSort(int* p, int* t, int* tau, int n){
         swap(&t[min], &t[i]);
         swap(&p[min], &p[i]);
     }
+}
+
+/**
+* Helper function for sorting processes
+* @param x is a pointer to a value to be swapped with y
+* @param y is a pointer to a value to be swapped with x
+*/
+void swap(int* x, int* y){
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+/**
+* Frees memory and exits program
+*/
+void terminate(){
+    int i;
+    for(i = 0; i < numProcesses; i++)
+        free(processes[i].t);
+    free(processes);
+    processes = NULL;
+    exit(1);
 }
 
 /**
